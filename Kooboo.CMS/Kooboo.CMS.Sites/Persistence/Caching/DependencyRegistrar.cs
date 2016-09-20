@@ -71,6 +71,10 @@ namespace Kooboo.CMS.Sites.Persistence.Caching
                 {
                     return new LabelProvider((ILabelProvider)resolvedObject);
                 }
+                if (resolvedObject is IUrlRedirectProvider)
+                {
+                    return new UrlRedirectProvider((IUrlRedirectProvider)resolvedObject);
+                }
                 return resolvedObject;
             }
         }

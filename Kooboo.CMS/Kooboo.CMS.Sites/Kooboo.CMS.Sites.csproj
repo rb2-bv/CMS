@@ -201,6 +201,7 @@
     <Compile Include="Persistence\Caching\ABSiteSettingProvider.cs" />
     <Compile Include="Persistence\Caching\ABRuleSettingProvider.cs" />
     <Compile Include="Persistence\Caching\LabelProvider.cs" />
+    <Compile Include="Persistence\Caching\UrlRedirectProvider.cs" />
     <Compile Include="Persistence\FileSystem\ABPageTestResultProvider.cs" />
     <Compile Include="Persistence\FileSystem\JsonListFileStorage.cs" />
     <Compile Include="Persistence\FileSystem\LabelImportExportHelper.cs" />
