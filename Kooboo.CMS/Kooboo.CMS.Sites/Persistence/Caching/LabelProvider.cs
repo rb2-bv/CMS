@@ -42,16 +42,23 @@ namespace Kooboo.CMS.Sites.Persistence.Caching
                         List<Label> labelsOfCategory = inner.GetLabels(GetSite(dummy), dummy.Category).ToList();
                         foreach (Label label in labelsOfCategory)
                         {
-                            if (!labelsOfCategoryInDictionary.ContainsKey(label.Category ?? "" + "_" + label.Name))
+                            string labelKey = ((label.Category ?? "") + "_" + label.Name);
+                            if (!labelsOfCategoryInDictionary.ContainsKey(labelKey))
                             {
-                                labelsOfCategoryInDictionary.Add(label.Category ?? "" + "_" + label.Name, label);
+                                labelsOfCategoryInDictionary.Add(labelKey, label);
                             }
                         }
 
                         return labelsOfCategoryInDictionary;
                     });
 
-            return cachedLabelsOfCategory[dummy.Category ?? "" + "_" + dummy.Name];
+            string dummyKey = ((dummy.Category ?? "") + "_" + dummy.Name);
+            if (cachedLabelsOfCategory.ContainsKey(dummyKey))
+            {
+                return cachedLabelsOfCategory[dummyKey];
+            }
+
+            return null;
         }
 
         public IEnumerable<string> GetCategories(Site site)
