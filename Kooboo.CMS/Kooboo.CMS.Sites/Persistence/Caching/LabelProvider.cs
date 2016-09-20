@@ -6,6 +6,7 @@
 // See the file LICENSE.txt for details.
 // 
 #endregion
+using Kooboo.CMS.Caching;
 using Kooboo.CMS.Sites.Models;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,34 @@ namespace Kooboo.CMS.Sites.Persistence.Caching
             this.inner = inner;
         }
         #endregion
+
+        public override Label Get(Label dummy)
+        {
+            if (dummy == null)
+            {
+                return dummy;
+            }
+
+            IDictionary<string, Label> cachedLabelsOfCategory = GetObjectCache(GetSite(dummy))
+                .GetCache(string.Format("Label:category:{0}", dummy.Category),
+                    () =>
+                    {
+                        IDictionary<string, Label> labelsOfCategoryInDictionary = new Dictionary<string, Label>();
+
+                        List<Label> labelsOfCategory = inner.GetLabels(GetSite(dummy), dummy.Category).ToList();
+                        foreach (Label label in labelsOfCategory)
+                        {
+                            if (!labelsOfCategoryInDictionary.ContainsKey(label.Category ?? "" + "_" + label.Name))
+                            {
+                                labelsOfCategoryInDictionary.Add(label.Category ?? "" + "_" + label.Name, label);
+                            }
+                        }
+
+                        return labelsOfCategoryInDictionary;
+                    });
+
+            return cachedLabelsOfCategory[dummy.Category ?? "" + "_" + dummy.Name];
+        }
 
         public IEnumerable<string> GetCategories(Site site)
         {
